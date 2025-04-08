@@ -49,8 +49,11 @@ class MyAppState extends State<MyApp>{
       });
     }
   }
+  // *  dio 라이브러리 이용하여 REST 통신 하는 함수
+  //dynamic todoList = []; // 빈 리스트 선언
+  List< dynamic > todoList = [];
+  // dynamic , List<dynamic> , * List<Map<String,dynamic> *
 
-  dynamic todoList = [];
   void todoGet() async{
     try{
       final response = await dio.get("http://192.168.40.45:8080/day04/todos");
@@ -63,7 +66,16 @@ class MyAppState extends State<MyApp>{
     }catch(e){
       print(e);
     }
-}
+  }
+
+  // ** 위젯을 실행했을 때 최초로 1번 실행
+  @override
+  void initState() {
+    super.initState();
+    todoGet(); // 모든 할 일 목록 가져오기 함수 실행
+  }
+
+
 
 
   @override
@@ -73,15 +85,45 @@ class MyAppState extends State<MyApp>{
         body: Center(
           child: Column(
             children: [
-              Text(responseText),
-              TextButton(
+              Text(responseText), // 텍스트 위젯
+              TextButton( // 버튼 위젯
                   onPressed: todoSend,
                   child: Text("자바통신")
               ),
-              TextButton(
+              TextButton( // 버튼 위젯
                   onPressed: todoGet,
                   child: Text("자바통신2")
-              )
+              ),
+              Expanded( // 확장위젯 - Expanded : colum에서 남은 공간 모두를 채워주는 위젯
+                child: ListView( // Listview 위젯 : 스크롤이 가능한 목록 (주의:부모요소의 100% 높이 사용)
+
+                    // 샘플
+                  // children: [ // ListTitle : 목록에 대입할 항목 위젯
+                  //   ListTile(title : Text("플러터"), subtitle: Text("1") ),
+                  //   ListTile(title : Text("다트"), subtitle: Text("2") ),
+                  //   ListTile(title : Text("파이썬"), subtitle: Text("3") )
+                  // ],
+
+
+                  // * 상태 변수에 있는 모든 값들을 반복문을 이용하여 출력 *
+
+                    // [방법1] 일반 for문
+                  // children: [
+                  //   for(int index = 0; index < todoList.length; index++) // 상태 변수에 저장된 할 일 목록 순회
+                  //     ListTile(title : Text(todoList[index]['title'])) // index 번재의 할 일 제목을 ListTitle 위젯에 Text 대입
+                  // ],
+
+
+                    // [방법2] .map
+                  // 각 리스트/배열 의 요소들을 하나씩 순회하여 새로운 리스트/배열을 반환
+                  children: todoList.map((todo) { // [] X ---> map 자체가 리스트라서 필요없음
+                      return ListTile(title: Text(todo['title']), subtitle: Text(todo['content']));
+                    }).toList() // 리스트명.map(반복변수명){return 위젯명;}).toList()
+                  // dynamic todoList = [] ---> map 에서는 오류 발생함 / List 타입이 아니라서 map 작동 불가.
+                  // List<dynamic> todoList = [] ---> map에서 정상 작동
+
+                )
+              ),
             ],
           )
         ),
