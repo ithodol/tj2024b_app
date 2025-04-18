@@ -17,10 +17,18 @@ class _UpdateSate extends State<Update> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    int id = ModalRoute.of(context)!.settings.arguments as int;
 
-    if( titleController.text == '' ){
-      findById(id);
+
+    final args = ModalRoute.of(context)?.settings.arguments;
+
+    if (args == null || args is! int) {
+      print('잘못된 arguments입니다. $args'); // 오류 메시지 출력
+      return; // arguments가 없거나 int가 아닐 경우 아무 것도 하지 않음
+    }
+
+    int id = args;  // arguments가 int일 때만 처리
+    if (titleController.text == '') {
+      findById(id); // id로 책 정보를 불러오기
     }
   }
 
@@ -29,19 +37,23 @@ class _UpdateSate extends State<Update> {
   Map<String, dynamic> book = {};
 
   void findById(int id) async{
-
-      try{
+    try {
       final response = await dio.get("http://192.168.40.45:8080/book/view?id=$id");
       final data = response.data;
 
-      setState(() {
-        book = data;
-        titleController.text = data['title'];
-        writerController.text = data['writer'];
-        memoController.text = data['memo'];
-      });
-      print("불러온 데이터: $book");
-    }catch(e){print(e);}
+      if (data != null) {
+        setState(() {
+          book = data;
+          titleController.text = data['title'];
+          writerController.text = data['writer'];
+          memoController.text = data['memo'];
+        });
+      } else {
+        print('데이터를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
 

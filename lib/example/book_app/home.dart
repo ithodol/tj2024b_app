@@ -32,12 +32,52 @@ class _HomeState extends State<Home>{
   }
 
 
-  void delete(int id) async{
+
+  void showDeleteDialog(int id) {
+    TextEditingController pwdController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('비밀번호 확인'),
+          content: TextField(
+            controller: pwdController,
+            obscureText: true,
+            decoration: InputDecoration(hintText: "비밀번호 입력"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("취소"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                delete(id, pwdController.text);
+              },
+              child: Text("삭제"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void delete(int id, String password) async{
     try{
-      final response = await dio.delete("http://192.168.40.45:8080/book?id=$id");
+      final response = await dio.delete("http://192.168.40.45:8080/book",
+        queryParameters: {
+          "id": id,
+          "password": password
+        }
+      );
       final data = response.data;
       if(data == true){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("삭제 완료")));
         findAll();
+      }else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("비밀번호가 일치하지 않습니다")));
       }
     }catch(e){print(e);}
   }
@@ -76,7 +116,7 @@ class _HomeState extends State<Home>{
                           children: [
                             IconButton(onPressed: () => {Navigator.pushNamed(context, "/update", arguments : book['id'])}, icon: Icon(Icons.edit)),
                             IconButton(onPressed: () => {Navigator.pushNamed(context, "/detail", arguments : book['id'])}, icon: Icon(Icons.info)),
-                            IconButton(onPressed: () => {delete(book['id']) } , icon: Icon( Icons.delete ) ),
+                            IconButton(onPressed: () => showDeleteDialog(book['id']) , icon: Icon( Icons.delete ) ),
                           ],
                         ),
                       ),
