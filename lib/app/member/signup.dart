@@ -16,7 +16,7 @@ class _SignupState extends State<Signup>{
   // 등록 버튼 클릭시
   void onSignup() async{
     final sendData = {
-      'email' : emailController.text,
+      'memail' : emailController.text,
       'mpwd' : pwdController.text,
       'mname' : nameController.text
     };
