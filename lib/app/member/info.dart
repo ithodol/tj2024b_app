@@ -35,7 +35,7 @@ class _InfoState extends State<Info>{
     }else{
       setState(() {
         isLogin = false;
-        print("비로그인 중");
+        print(">> 비로그인 중");
       });
     }
   }
@@ -63,6 +63,21 @@ class _InfoState extends State<Info>{
   }
 
   // 5. 로그아웃 요청
+  void logout() async{
+    // (1) 토큰 꺼내기
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if(token == null){ // 토큰이 존재하지 않으면 함수 종료
+      return;
+    }
+    // (2) 서버에게 로그아웃 요청
+    Dio dio = Dio();
+    dio.options.headers['Authorization'] = token;
+    final response = await dio.get("http://localhost:8080/member/logout");
+    // (3) 전역변수(클라이언트)에도 토큰 삭제
+    await prefs.remove('token');
+    print("로그아웃 완료");
+  }
 
 
   @override
@@ -81,7 +96,7 @@ class _InfoState extends State<Info>{
             Text("이름(닉네임) : $mname"),
             SizedBox(height: 20),
             ElevatedButton(
-                onPressed: () => {},
+                onPressed: logout,
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white
