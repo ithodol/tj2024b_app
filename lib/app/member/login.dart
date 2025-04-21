@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget{
   @override
@@ -23,7 +24,11 @@ class _LoginState extends State<Login>{
       Dio dio = Dio();
       final response = await dio.post("http://localhost:8080/member/login", data: sendData);
       final data = response.data;
-      if(data != ''){
+      if(data != ''){ // 로그인 성공시 토큰을 SharedPreferences에 저장하기
+        // 1. 전역변수 호출
+        final prefs = await SharedPreferences.getInstance();
+        // 2. 전역변수 값 추가
+        await prefs.setString('token', data);
         print("로그인 성공");
       }else{
         print("로그인 실패");
