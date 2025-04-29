@@ -89,7 +89,7 @@ class _ProductRegister extends State< ProductRegister >{
       final response = await dio.post("$baseUrl/product/register" , data : formData );
       // 4. DIO 응답 처리
       if( response.statusCode == 201 && response.data == true  ){
-        print("제품등록 성공 ");
+        print("제품 등록 성공 ");
       }
     }catch(e){ print( e ); }
   }
@@ -166,6 +166,7 @@ class _ProductRegister extends State< ProductRegister >{
 
             TextField(
               controller: pcontentController,
+              maxLines: 3,
               decoration: InputDecoration( labelText: "제품 설명" ),
             ) ,
             SizedBox( height: 16 ),

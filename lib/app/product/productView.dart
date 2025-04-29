@@ -81,7 +81,6 @@ class _ProductViewState extends State<ProductView>{ // [자식위젯]
       final response = await dio.delete("$baseUrl/product/delete?pno=$pno"); // pno 매개변수
       if(response.data == true){
         print("제품 삭제 성공");
-        Navigator.pushReplacement( context , MaterialPageRoute( builder: (context)=> ProductList() ));
       }
     }catch(e){
       print(e);
@@ -160,12 +159,20 @@ class _ProductViewState extends State<ProductView>{ // [자식위젯]
               Row(
                 children: [
                   ElevatedButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.grey[200],   // 버튼 배경색
+                        foregroundColor: Colors.black,   // 글씨, 아이콘 색
+                      ),
                       onPressed: () => {},
                       child: Text("수정")
                   ),
-
+                  SizedBox( height: 120),
                   ElevatedButton(
-                      onPressed: () => {},
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.black,   // 버튼 배경색
+                        foregroundColor: Colors.white,   // 글씨, 아이콘 색
+                      ),
+                      onPressed: () => { onDelete( product['pno'] ) },
                       child: Text("삭제")
                   ),
                 ],
