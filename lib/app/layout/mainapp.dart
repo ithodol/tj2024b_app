@@ -1,82 +1,78 @@
-//
-
+// * mainapp.dart : 레이아웃 구성 하는 파일
 import 'package:flutter/material.dart';
 import 'package:tj2024b_app/app/member/info.dart';
 import 'package:tj2024b_app/app/member/login.dart';
 import 'package:tj2024b_app/app/member/signup.dart';
 import 'package:tj2024b_app/app/product/productList.dart';
+import 'package:tj2024b_app/app/product/productRegister.dart';
 
 class MainApp extends StatefulWidget{
   @override
-  State<StatefulWidget> createState() {
-    return _MainAppState();
-  }
+  State<StatefulWidget> createState() { return _MainAppState(); }
 }
-
 class _MainAppState extends State<MainApp>{
-  // 1. 페이지 위젯 리스트 : 여러개의 위젯들을 갖는 리스트
+
+  // 1. 페이지 위젯 리스트 : 여러개 위젯들을 갖는 리스트
     // Widget : 여러 위젯들을 상속하는 상위 위젯(클래스)
   List<Widget> pages = [
     Text("홈 페이지"),
-    ProductList(),
-    Text("게시물2 페이지"),
-    Info() //Text("내 정보 페이지"),
+    ProductList(), // 제품목록 위젯
+    ProductRegister(),
+    Info() //Text("내정보 페이지"),
   ];
-  // 2. 페이지 상단 제목 리스트
-  List<String> pageTitle = ['홈','제품목록', '게시물2','내정보'];
-  
-  // 3. 현재 클릭된 페이지 번호 : 상태 변수
-  int selectedIndex = 0; // 0:홈, 1:게시물1, 2:게시물2, 3:내정보
 
+  // 2. 페이지 상단 제목 리스트
+  List<String> pageTitle = [
+    '홈' ,
+    '제품목록' ,
+    '제품등록' ,
+    '내정보'
+  ];
+  // 3. 현재 클릭된 페이지 번호 : 상태 변수
+    // 0 = 홈 , 1 : 게시물 , 2:내정보
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( // 레이아웃
-      appBar: AppBar( // 상단메뉴
-        title: Row(
-          children: [ // 가로 배치할 하위 위젯
-            // 이미지 삽입
-            // 로컬이미지(플러터) / 네트워크이미지(스프링서버)
-            // pubspex.yaml 파일에 아래와 같이 입력 -> 상단 pub get(새로고침)
-            // flutter:
-            //   assets:
-            //     - assets/images/
-            Image(
-              image: AssetImage('assets/images/flutter_logo.png'),
-              height: 50,
-              width: 50,
-            ),
-            SizedBox(width: 20),
-            Text(pageTitle[selectedIndex], style: TextStyle(color: Colors.orange)),
-          ]
-        ),
-        backgroundColor: Colors.black,
+    return Scaffold( // 레이아웃 위젯
 
-      ),
-      body: pages[selectedIndex], // 본문 : 현재 선택된 위젯들 보여주기
+      appBar: AppBar( // 상단 메뉴
+          title: Row( // 가로배치
+            children: [ // 가로배치할 하위 위젯
+              // 로컬이미지(플러터) vs 네트워크이미지(Spring서버)
+              // 프로젝트폴더 > assets(폴더생성) > images(폴더생성) > logo.jpg
+              // 프로젝트폴더 > pubspec.yaml > 'flutter:' 작성된 곳에서 아래와 같이 코드 추가한다 -> 상단 [pub get]새로고침
+              // flutter:
+              //   assets :
+              //     - assets/images/
+              Image(
+                image: AssetImage('assets/images/flutter_logo.png'), // 로컬이미지 : Image(image: AssetImage('로컬이미지경로'))
+                height: 50, // 이미지 세로 크기
+                width: 50, // 이미지 가로 크기
+              ),
+              SizedBox( width: 20,), // 여백
+              Text( pageTitle[ selectedIndex ] ), // 현재 선택된 위젯의 제목 반환
+            ]
+          ) ,
+          backgroundColor: Colors.white, // 배경색
+      ), // 헤더 end
 
+      body: pages[ selectedIndex ], // *본문 : 현재 선택된 위젯 반환* // 본문 end
 
       bottomNavigationBar: BottomNavigationBar(
-        // onTap : BottomNavigationBar에서 해당하는 버튼을 클릭했을 때 발생하는 이벤트 속성
-          // (index) => 함수명(index) : index에는 선택된 인텍스 번호 반환
-        onTap: (index) => setState(() {selectedIndex = index;}),
+        // onTap : BottomNavigationBar 에서 해당 하는 버튼 클릭 했을때 발생하는 이벤트속성
+        // items 에서 선택된 index 인덱스 번호 반환된다.
+        onTap : (index) => setState( () { selectedIndex = index; } ),
         currentIndex: selectedIndex, // 현재 선택된 버튼 번호
-        type: BottomNavigationBarType.fixed, // 고정 크기 설정, 아이콘이 많아지면 자동으로 확대/축소
-
-        unselectedItemColor: Colors.grey, // 기본 색상
-        selectedItemColor: Colors.orange, // 선택된 색상
-        
-
-
-        items: [ // 여러개의 버튼 위젯들
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.forum), label: '제품목록'),
-          BottomNavigationBarItem(icon: Icon(Icons.forum), label: '게시물2'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '내 정보'),
+        type: BottomNavigationBarType.fixed, // 4개이상일때 아이콘을 고정 크기 설정 , 아이콘이 많아지면 자동으로 확대/축소
+        items: [ // 여러개 버튼 위젯들
+          BottomNavigationBarItem(icon: Icon(Icons.home) , label : '홈'), // 아이콘 위젯
+          BottomNavigationBarItem(icon: Icon(Icons.forum) , label: '제품목록' ),
+          BottomNavigationBarItem(icon: Icon(Icons.forum) , label: "제품등록"),
+          BottomNavigationBarItem(icon: Icon(Icons.person) , label: "내정보"),
         ],
-        backgroundColor: Colors.black,
+      ) // 바텀 end
 
-      ), // 하단메뉴
-    );
-  }
-}
+    ); // Scaffold end
+  } // build end
+} // class end

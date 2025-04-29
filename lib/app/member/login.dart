@@ -10,83 +10,72 @@ class Login extends StatefulWidget{
     return _LoginState();
   }
 }
-
 class _LoginState extends State<Login>{
-  TextEditingController emailController = TextEditingController();
-  TextEditingController pwdController = TextEditingController();
+  // 1. 입력상자 컨트롤러
+  TextEditingController emailControl = TextEditingController();
+  TextEditingController pwdControl = TextEditingController();
 
-
-  void onLogin() async{
-    final sendData = {
-      'memail' : emailController.text,
-      'mpwd' : pwdController.text
-    };
-
-    try{
+  // 2. 자바와 통신
+  void onLogin( ) async {
+    try {
       Dio dio = Dio();
-      final response = await dio.post("http://localhost:8080/member/login", data: sendData);
+      final sendData = { "memail": emailControl.text, "mpwd": pwdControl.text};
+      final response = await dio.post( "http://localhost:8080/member/login", data: sendData);
       final data = response.data;
-      if(data != ''){ // 로그인 성공시 토큰을 SharedPreferences에 저장하기
+      if (data != ''){ // 로그인 성공시 토큰 SharedPreferences 저장하기.
         // 1. 전역변수 호출
         final prefs = await SharedPreferences.getInstance();
         // 2. 전역변수 값 추가
-        await prefs.setString('token', data);
-        print("로그인 성공");
+        await prefs.setString( 'token', data );
 
         // * 로그인 성공시 페이지 전환
         Navigator.pushReplacement(
           context ,
           MaterialPageRoute(builder: (context)=>MainApp() ),
         );
-      }else{
-        print("로그인 실패");
+
+      } else {
+        print("로그인 실패 ");
       }
-    }catch(e){
-      print(e);
-    }
-  }
-
-
+    }catch(e){ print(e); }
+  } // c end
 
   @override
   Widget build(BuildContext context) {
     return Scaffold( // 레이아웃 위젯
-      body: Container( // 여백 제공 박스 위젯
-        padding: EdgeInsets.all(30), // 안쪽 여백
-        margin: EdgeInsets.all(30), // 바깥 여백
-        child: Column( // 하위 요소 세로 배치
-          mainAxisAlignment: MainAxisAlignment.center, // 현재 축(Column) 기준으로 정렬 (flex와 같음)
-          children: [ // 하위 요소들
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(labelText: "이메일", border: OutlineInputBorder()),
+      body: Container( // 여백 제공하는 박스 위젯
+        padding: EdgeInsets.all( 30 ) , // 박스 안쪽 여백
+        margin: EdgeInsets.all( 30 ) , // 박스 바깥 여백
+        child: Column( // 하위 요소 세로 위젯
+          mainAxisAlignment: MainAxisAlignment.center, // 현재 축(Column) 기준으로 정렬
+          children: [ // 하위 요소들 위젯
+            TextField(  controller: emailControl,
+              decoration: InputDecoration( labelText: "이메일" , border: OutlineInputBorder() ),
             ),
-
-            SizedBox(height: 20),
-            TextField(
-              controller: pwdController, obscureText: true, // 입력값 감추기
-              decoration: InputDecoration(labelText: "비밀번호", border: OutlineInputBorder()),
+            SizedBox( height: 20 , ),
+            TextField(  controller: pwdControl, obscureText: true, // 입력값 감추기
+              decoration: InputDecoration( labelText: "비밀번호" , border: OutlineInputBorder()),
             ),
-
-            SizedBox(height: 20),
-            ElevatedButton(
-                onPressed: onLogin,
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white
-                ),
-                child: Text("로그인")
-            ),
-
+            SizedBox( height: 20 , ),
+            ElevatedButton( onPressed: onLogin , child: Text("로그인") ),
             SizedBox( height: 20 ,),
-            TextButton(onPressed: ()=>{
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => Signup() )
+            TextButton(onPressed: ()=>{ 
+              Navigator.pushReplacement(context, 
+                MaterialPageRoute(builder: (context) => Signup() )
               )
             }, child: Text("처음 방문이면 _회원가입") )
           ],
-        ),
-      ),
-    );
+        ),// c end
+      ), // c end 
+    ); // S end 
   }
 }
+
+
+
+
+
+
+
+
+
