@@ -98,7 +98,13 @@ class _InfoState extends State<Info>{
             SizedBox( height: 20,),
             Text("이름(닉네임) : $mname"),
             SizedBox( height: 20,),
-            ElevatedButton(onPressed: logout , child: Text("로그아웃") ),
+            ElevatedButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.black,   // 버튼 배경색
+                  foregroundColor: Colors.white,   // 글씨, 아이콘 색
+                ),
+                onPressed: logout,
+                child: Text("로그아웃") ),
           ],
         ),
       ),
