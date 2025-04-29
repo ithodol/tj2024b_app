@@ -51,15 +51,22 @@ class _MainAppState extends State<MainApp>{
                 width: 50, // 이미지 가로 크기
               ),
               SizedBox( width: 20,), // 여백
-              Text( pageTitle[ selectedIndex ] ), // 현재 선택된 위젯의 제목 반환
+              Text( pageTitle[ selectedIndex ], // 현재 선택된 위젯의 제목 반환
+                style: TextStyle(color: Colors.white)
+              ),
             ]
           ) ,
-          backgroundColor: Colors.white, // 배경색
+          backgroundColor: Colors.black, // 배경색
+          iconTheme: IconThemeData(color: Colors.white) // 아이콘 색
       ), // 헤더 end
 
       body: pages[ selectedIndex ], // *본문 : 현재 선택된 위젯 반환* // 본문 end
 
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.black, // 배경색
+        selectedItemColor: Colors.white, // 선택 메뉴
+        unselectedItemColor: Colors.white70, // 미선택 메뉴
+
         // onTap : BottomNavigationBar 에서 해당 하는 버튼 클릭 했을때 발생하는 이벤트속성
         // items 에서 선택된 index 인덱스 번호 반환된다.
         onTap : (index) => setState( () { selectedIndex = index; } ),

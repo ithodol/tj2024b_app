@@ -20,7 +20,7 @@ class _LoginState extends State<Login>{
     try {
       Dio dio = Dio();
       final sendData = { "memail": emailControl.text, "mpwd": pwdControl.text};
-      final response = await dio.post( "http://localhost:8080/member/login", data: sendData);
+      final response = await dio.post( "http://192.168.40.45:8080/member/login", data: sendData);
       final data = response.data;
       if (data != ''){ // 로그인 성공시 토큰 SharedPreferences 저장하기.
         // 1. 전역변수 호출
@@ -57,13 +57,26 @@ class _LoginState extends State<Login>{
               decoration: InputDecoration( labelText: "비밀번호" , border: OutlineInputBorder()),
             ),
             SizedBox( height: 20 , ),
-            ElevatedButton( onPressed: onLogin , child: Text("로그인") ),
+            ElevatedButton(
+              onPressed: onLogin,
+              child: Text("로그인",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black, // 배경색을 회색으로 설정
+              ),
+            ),
             SizedBox( height: 20 ,),
-            TextButton(onPressed: ()=>{ 
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey[200],   // 버튼 배경색
+                foregroundColor: Colors.black,   // 글씨, 아이콘 색
+              ),
+              onPressed: ()=>{
               Navigator.pushReplacement(context, 
                 MaterialPageRoute(builder: (context) => Signup() )
               )
-            }, child: Text("처음 방문이면 _회원가입") )
+            }, child: Text("회원가입") )
           ],
         ),// c end
       ), // c end 

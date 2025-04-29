@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tj2024b_app/app/member/signup.dart';
 import 'package:tj2024b_app/app/product/productView.dart';
 import 'package:tj2024b_app/main.dart';
@@ -87,7 +88,8 @@ class _ProductListState extends State<ProductList>{
                 MaterialPageRoute(builder: (context)=> ProductView( pno: product['pno'] ) )
               )
             } ,
-            child: Card( 
+            child: Card(
+              color: Colors.white70,
               margin: EdgeInsets.all( 12 ), // 바깥여백
               child: Padding(
                   padding: EdgeInsets.all( 10 ), // 안쪽여백
@@ -101,23 +103,24 @@ class _ProductListState extends State<ProductList>{
                           fit: BoxFit.cover, ), // 만약에 이미지가 구역보다 크면 비율유지
                       ),
                   
-                  SizedBox( width: 20 ,) , // 여백
+                      SizedBox( width: 20 ,) , // 여백
 
-                  Expanded(child: Column(  // 그외 구역
-                    crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
-                    children: [
-                      Text( product['pname'] , style: TextStyle( fontSize: 18 , fontWeight: FontWeight.bold ), ) ,
-                      SizedBox( height: 8,),
-                      Text( "가격: ${ product['pprice'] }" , style: TextStyle( fontSize: 16 , color: Colors.red ), ) ,
-                      SizedBox( height: 4,),
-                      Text( "카테고리: ${  product['cname'] }" ) ,
-                      SizedBox( height: 4,),
-                      Text( "조회수: ${ product['pview'] }" ) ,
+                      Expanded(child: Column(
+                        // 그외 구역
+                        crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+                        children: [
+                          Text( product['pname'] , style: TextStyle( fontSize: 18 , fontWeight: FontWeight.bold ), ) ,
+                          SizedBox( height: 8,),
+                          Text( "가격: ${NumberFormat('#,###').format(product['pprice'])}원" , style: TextStyle( fontSize: 16 , color: Colors.red ), ) ,
+                          SizedBox( height: 4,),
+                          Text( "카테고리: ${  product['cname'] }" ) ,
+                          SizedBox( height: 4,),
+                          Text( "조회수: ${ product['pview'] }" ) ,
+                        ],
+                      )) , // Card의 남은 부분
                     ],
-                  )) , // Card의 남은 부분
-                ], 
-              ), // Row end
-            ), // Card end 
+                  ), // Row end
+              ),
             )
           );// InkWell end
         },
